@@ -1,13 +1,18 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class CoffeeMachine {
     private static boolean power;
     private int water;
     private int milk;
     private int coffee;
+
 
     static final int COFFEE_LIMIT = 60;
     static final int WATER_LIMIT = 720;
@@ -22,6 +27,8 @@ public class CoffeeMachine {
     private static final Logger logger = Logger.getLogger(CoffeeMachine.class.getName());
 
     ArrayList<Profile> profiles = new ArrayList<>();
+
+    Scanner scanner = new Scanner(System.in);
 
     public CoffeeMachine(boolean power, int water, int milk, int coffee) {
         CoffeeMachine.power = power;
@@ -39,12 +46,11 @@ public class CoffeeMachine {
     }
 
     public void setWater() {
-        if (water == WATER_LIMIT) {
+        if (getWater() == WATER_LIMIT) {
             System.out.println("В кофемашине максимальное количество воды");
         } else {
-            Scanner w = new Scanner(System.in);
             System.out.println("Добавьте воду: ");
-            int water = w.nextInt();
+            int water = scanner.nextInt();
             this.water = Math.min(this.getWater() + water, WATER_LIMIT);
             logger.info("water has been added to the coffee machine");
         }
@@ -58,9 +64,8 @@ public class CoffeeMachine {
         if (milk == MILK_LIMIT) {
             System.out.println("В кофемашине максимальное количество молока");
         } else {
-            Scanner m = new Scanner(System.in);
             System.out.println("Добавьте молоко: ");
-            int milk = m.nextInt();
+            int milk = scanner.nextInt();
             this.milk = Math.min(this.getMilk() + milk, MILK_LIMIT);
             logger.info("milk has been added to the coffee machine");
         }
@@ -74,9 +79,8 @@ public class CoffeeMachine {
         if (coffee == COFFEE_LIMIT) {
             System.out.println("В кофемашине максимальное количество кофе");
         } else {
-            Scanner c = new Scanner(System.in);
             System.out.println("Добавьте кофе: ");
-            int coffee = c.nextInt();
+            int coffee = scanner.nextInt();
             this.coffee = Math.min(this.getCoffee() + coffee, COFFEE_LIMIT);
             logger.info("coffee has been added to the coffee machine");
         }
@@ -87,16 +91,15 @@ public class CoffeeMachine {
     }
 
     void checkIngredients() {
-        if (this.water < MIN_WATER_LIMIT) {
+        if (this.getWater() < MIN_WATER_LIMIT) {
             System.out.println("Вода: " + getWater() + " - Недостаточно воды!");
         } else {
             System.out.println("Вода: " + getWater());
         }
-        if (this.milk < MIN_MILK_LIMIT) {
+        if (this.getMilk() < MIN_MILK_LIMIT) {
             System.out.println("Молоко: " + getMilk() + " - Недостаточно молока!");
         } else System.out.println("Молоко: " + getMilk());
-
-        if (this.coffee < MIN_COFFEE_LIMIT) {
+        if (this.getCoffee() < MIN_COFFEE_LIMIT) {
             System.out.println("Кофе: " + getCoffee() + " - Недостаточно кофе!");
         } else System.out.println("Кофе: " + getCoffee());
     }
@@ -112,13 +115,12 @@ public class CoffeeMachine {
         this.water -= 120 * count;
         this.coffee -= 10 * count;
         System.out.println("Espresso готов!" + "(" + count + " шт.)");
-        logger.info("espresso made in the amount of " + count + " pieces" );
+        logger.info("espresso made in the amount of " + count + " pieces");
     }
 
     void chooseCountOfEspresso() {
         System.out.print("Выберите количество:");
-        Scanner sc = new Scanner(System.in);
-        int count = sc.nextInt();
+        int count = scanner.nextInt();
         switch (count) {
             case (1) -> makeEspresso(1);
             case (2) -> makeEspresso(2);
@@ -131,11 +133,10 @@ public class CoffeeMachine {
     }
 
     void espresso() {
-        if (power && this.water >= MIN_WATER_LIMIT && this.coffee >= MIN_COFFEE_LIMIT) {
+        if (getPower() && getWater() >= MIN_WATER_LIMIT && getCoffee() >= MIN_COFFEE_LIMIT) {
             if (COUNT_OF_CUPS >= CUPS_LIMIT_FOR_CLEAN) {
                 System.out.println("Требуется очистка.\nПроизвести очистку?\n1 - Да\n2 - Нет");
-                Scanner cl = new Scanner(System.in);
-                int choice = cl.nextInt();
+                int choice = scanner.nextInt();
                 if (choice == 1) {
                     clean();
                 } else if (choice == 2) {
@@ -151,13 +152,12 @@ public class CoffeeMachine {
         this.milk -= 40 * count;
         this.coffee -= 10 * count;
         System.out.println("Cappuccino готов!" + "(" + count + " шт.)");
-        logger.info("cappuccino made in the amount of " + count + " pieces" );
+        logger.info("cappuccino made in the amount of " + count + " pieces");
     }
 
     void chooseCountOfCappuccino() {
         System.out.print("Выберите количество:");
-        Scanner sc = new Scanner(System.in);
-        int count = sc.nextInt();
+        int count = scanner.nextInt();
         switch (count) {
             case (1) -> makeCappuccino(1);
             case (2) -> makeCappuccino(2);
@@ -170,11 +170,10 @@ public class CoffeeMachine {
     }
 
     void cappuccino() {
-        if (power && this.water >= MIN_WATER_LIMIT && this.coffee >= MIN_COFFEE_LIMIT && this.milk >= MIN_MILK_LIMIT) {
+        if (getPower() && getWater() >= MIN_WATER_LIMIT && getCoffee() >= MIN_COFFEE_LIMIT && getMilk() >= MIN_MILK_LIMIT) {
             if (COUNT_OF_CUPS >= CUPS_LIMIT_FOR_CLEAN) {
                 System.out.println("Требуется очистка.\nПроизвести очистку?\n1 - Да\n2 - Нет");
-                Scanner cl = new Scanner(System.in);
-                int choice = cl.nextInt();
+                int choice = scanner.nextInt();
                 if (choice == 1) {
                     clean();
                 } else if (choice == 2) {
@@ -185,24 +184,27 @@ public class CoffeeMachine {
     }
 
     void chooseOptions() throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Выберите действие: \n1 - Espresso\n2 - Cappuccino\n3 - Проверить ингредиенты\n4 - Добавить ингредиенты\n5 - Проверить, нужна ли очистка\n6 - Показать рецепт Espresso\n7 - Показать рецепт Cappuccino\n8 - Быстрый набор\n9 - Создать профиль\n10 - Выключить");
+        System.out.println("Выберите действие: \n1 - Espresso\n2 - Cappuccino\n3 - Проверить ингредиенты\n4 - Добавить ингредиенты\n5 - Проверить, нужна ли очистка\n6 - Показать рецепт Espresso\n7 - Показать рецепт Cappuccino\n8 - Быстрый набор\n9 - Создать профиль\n10 - Показать логи\n11 - Выключить");
         int choice = scanner.nextInt();
         switch (choice) {
-            case 1 -> this.espresso();
-            case 2 -> this.cappuccino();
-            case 3 -> this.checkIngredients();
-            case 4 -> this.addIngredients();
-            case 5 -> this.checkClean();
-            case 6 -> this.getIngredients(0);
-            case 7 -> this.getIngredients(1);
-            case 8 -> this.showProfiles();
+            case 1 -> espresso();
+            case 2 -> cappuccino();
+            case 3 -> checkIngredients();
+            case 4 -> addIngredients();
+            case 5 -> checkClean();
+            case 6 -> getIngredients(0);
+            case 7 -> getIngredients(1);
+            case 8 -> showProfiles();
             case 9 -> {
                 if (profiles.size() < PROFILES_LIMIT) {
                     create();
                 } else System.out.println("Настроено максимальное количество профилей");
             }
-            case 10 -> setPower(false);
+            case 10 -> showLogs();
+            case 11 -> {
+                setPower(false);
+                logger.info("coffee machine is OFF");
+            }
             default -> chooseOptions();
         }
     }
@@ -224,8 +226,7 @@ public class CoffeeMachine {
             System.out.println("Очистка пока не нужна.");
         } else {
             System.out.println("Требуется очистка.\nПроизвести очистку?\n1 - Да\n2 - Нет");
-            Scanner cl = new Scanner(System.in);
-            int choice = cl.nextInt();
+            int choice = scanner.nextInt();
             if (choice == 1) {
                 clean();
             } else if (choice == 2) {
@@ -268,7 +269,6 @@ public class CoffeeMachine {
     }
 
     void chooseProfile() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Выберите Ваш профиль");
         int choice = scanner.nextInt();
         switch (choice) {
@@ -346,11 +346,36 @@ public class CoffeeMachine {
         } else System.out.println("Введите число от 1 до 2");
     }
 
+    static void showLogs() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream("logs.log");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+            String str;
+            while ((str = bufferedReader.readLine()) != null) {
+                if (str.contains("made")) {
+                    System.out.println(str);
+                }
+            }
+            fileInputStream.close();
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
+        try {
+            FileHandler fh;
+            fh = new FileHandler("logs.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         CoffeeMachine coffeeMachine = new CoffeeMachine(false, 720, 240, 60);
         try {
-            CoffeeMachine.onOff();
-        } catch (InputMismatchException e) {
+            onOff();
+        } catch (Exception e) {
             System.out.println("Введите число от 1 до 2");
         }
 
@@ -358,7 +383,7 @@ public class CoffeeMachine {
             try {
                 coffeeMachine.chooseOptions();
             } catch (Exception e) {
-                System.out.println("Введите число от 1 до 10");
+                System.out.println("Введите число от 1 до 11");
             }
         }
     }
@@ -372,7 +397,7 @@ class Profile {
     String name;
 
     public Profile() {
-        System.out.println("Введите название: ");
+        System.out.println("Введите название профиля: ");
         this.name = scanner.nextLine();
         System.out.println("Количество воды в мл: ");
         this.water = scanner.nextInt();
