@@ -310,59 +310,6 @@ public class CoffeeMachine {
                 }
             }
         }
-//        switch (choice) {
-//            case 1 -> {
-//                if (profiles.size() > 0) {
-//                    COUNT_OF_CUPS++;
-//                    this.water -= profiles.get(0).water;
-//                    this.milk -= profiles.get(0).milk;
-//                    this.coffee -= profiles.get(0).coffee;
-//                    System.out.println("Ваш кофе готов");
-//                    logger.info("profile (1) coffee made");
-//                }
-//            }
-//            case 2 -> {
-//                if (profiles.size() > 1) {
-//                    COUNT_OF_CUPS++;
-//                    this.water -= profiles.get(1).water;
-//                    this.milk -= profiles.get(1).milk;
-//                    this.coffee -= profiles.get(1).coffee;
-//                    System.out.println("Ваш кофе готов");
-//                    logger.info("profile (2) coffee made");
-//                }
-//            }
-//            case 3 -> {
-//                if (profiles.size() > 2) {
-//                    COUNT_OF_CUPS++;
-//                    this.water -= profiles.get(2).water;
-//                    this.milk -= profiles.get(2).milk;
-//                    this.coffee -= profiles.get(2).coffee;
-//                    System.out.println("Ваш кофе готов");
-//                    logger.info("profile (2) coffee made");
-//                }
-//            }
-//            case 4 -> {
-//                if (profiles.size() > 3) {
-//                    COUNT_OF_CUPS++;
-//                    this.water -= profiles.get(3).water;
-//                    this.milk -= profiles.get(3).milk;
-//                    this.coffee -= profiles.get(3).coffee;
-//                    System.out.println("Ваш кофе готов");
-//                    logger.info("profile (4) coffee made");
-//                }
-//            }
-//            case 5 -> {
-//                if (profiles.size() > 4) {
-//                    COUNT_OF_CUPS++;
-//                    this.water -= profiles.get(4).water;
-//                    this.milk -= profiles.get(4).milk;
-//                    this.coffee -= profiles.get(4).coffee;
-//                    System.out.println("Ваш кофе готов");
-//                    logger.info("profile (5) coffee made");
-//                }
-//            }
-//            default -> System.out.println("Профиль не найден");
-//        }
     }
 
     void tripleEspresso() {
