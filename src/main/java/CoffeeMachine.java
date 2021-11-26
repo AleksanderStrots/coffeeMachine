@@ -13,7 +13,6 @@ public class CoffeeMachine {
     private int milk;
     private int coffee;
 
-
     static final int COFFEE_LIMIT = 60;
     static final int WATER_LIMIT = 720;
     static final int MILK_LIMIT = 240;
@@ -23,6 +22,7 @@ public class CoffeeMachine {
     static final int CUPS_LIMIT_FOR_CLEAN = 50;
     static int COUNT_OF_CUPS = 0;
     final int PROFILES_LIMIT = 5;
+    int count;
 
     private static final Logger logger = Logger.getLogger(CoffeeMachine.class.getName());
 
@@ -91,15 +91,15 @@ public class CoffeeMachine {
     }
 
     void checkIngredients() {
-        if (this.getWater() < MIN_WATER_LIMIT) {
+        if (getWater() < MIN_WATER_LIMIT * count) {
             System.out.println("Вода: " + getWater() + " - Недостаточно воды!");
         } else {
             System.out.println("Вода: " + getWater());
         }
-        if (this.getMilk() < MIN_MILK_LIMIT) {
+        if (getMilk() < MIN_MILK_LIMIT * count) {
             System.out.println("Молоко: " + getMilk() + " - Недостаточно молока!");
         } else System.out.println("Молоко: " + getMilk());
-        if (this.getCoffee() < MIN_COFFEE_LIMIT) {
+        if (getCoffee() < MIN_COFFEE_LIMIT * count) {
             System.out.println("Кофе: " + getCoffee() + " - Недостаточно кофе!");
         } else System.out.println("Кофе: " + getCoffee());
     }
@@ -120,16 +120,18 @@ public class CoffeeMachine {
 
     void chooseCountOfEspresso() {
         System.out.print("Выберите количество:");
-        int count = scanner.nextInt();
-        switch (count) {
-            case (1) -> makeEspresso(1);
-            case (2) -> makeEspresso(2);
-            case (3) -> makeEspresso(3);
-            default -> {
-                System.out.println("Введите число от 1 до 3");
-                chooseCountOfEspresso();
+        count = scanner.nextInt();
+        if (getWater() >= MIN_WATER_LIMIT * count && getCoffee() >= MIN_COFFEE_LIMIT * count) {
+            switch (count) {
+                case (1) -> makeEspresso(1);
+                case (2) -> makeEspresso(2);
+                case (3) -> makeEspresso(3);
+                default -> {
+                    System.out.println("Введите число от 1 до 3");
+                    chooseCountOfEspresso();
+                }
             }
-        }
+        } else checkIngredients();
     }
 
     void espresso() {
@@ -143,7 +145,7 @@ public class CoffeeMachine {
                     chooseCountOfEspresso();
                 }
             } else chooseCountOfEspresso();
-        } else this.checkIngredients();
+        } else checkIngredients();
     }
 
     void makeCappuccino(int count) {
@@ -157,16 +159,18 @@ public class CoffeeMachine {
 
     void chooseCountOfCappuccino() {
         System.out.print("Выберите количество:");
-        int count = scanner.nextInt();
-        switch (count) {
-            case (1) -> makeCappuccino(1);
-            case (2) -> makeCappuccino(2);
-            case (3) -> makeCappuccino(3);
-            default -> {
-                System.out.println("Введите число от 1 до 3");
-                chooseCountOfCappuccino();
+        count = scanner.nextInt();
+        if (getWater() >= MIN_WATER_LIMIT * count && getCoffee() >= MIN_COFFEE_LIMIT * count && getMilk() >= MIN_MILK_LIMIT * count) {
+            switch (count) {
+                case (1) -> makeCappuccino(1);
+                case (2) -> makeCappuccino(2);
+                case (3) -> makeCappuccino(3);
+                default -> {
+                    System.out.println("Введите число от 1 до 3");
+                    chooseCountOfCappuccino();
+                }
             }
-        }
+        } else checkIngredients();
     }
 
     void cappuccino() {
@@ -183,25 +187,41 @@ public class CoffeeMachine {
         } else checkIngredients();
     }
 
-    void chooseOptions() throws Exception {
-        System.out.println("Выберите действие: \n1 - Espresso\n2 - Cappuccino\n3 - Проверить ингредиенты\n4 - Добавить ингредиенты\n5 - Проверить, нужна ли очистка\n6 - Показать рецепт Espresso\n7 - Показать рецепт Cappuccino\n8 - Быстрый набор\n9 - Создать профиль\n10 - Показать логи\n11 - Выключить");
+    public void chooseOptions() throws InputMismatchException {
+        System.out.println("""
+                Выберите действие:\s
+                1 - Espresso
+                2 - Тройной espresso
+                3 - Cappuccino
+                4 - Тройной cappuccino
+                5 - Проверить ингредиенты
+                6 - Добавить ингредиенты
+                7 - Проверить, нужна ли очистка
+                8 - Показать рецепт Espresso
+                9 - Показать рецепт Cappuccino
+                10 - Быстрый набор
+                11 - Создать профиль
+                12 - Показать логи
+                13 - Выключить""");
         int choice = scanner.nextInt();
         switch (choice) {
             case 1 -> espresso();
-            case 2 -> cappuccino();
-            case 3 -> checkIngredients();
-            case 4 -> addIngredients();
-            case 5 -> checkClean();
-            case 6 -> getIngredients(0);
-            case 7 -> getIngredients(1);
-            case 8 -> showProfiles();
-            case 9 -> {
+            case 2 -> tripleEspresso();
+            case 3 -> cappuccino();
+            case 4 -> tripleCappuccino();
+            case 5 -> checkIngredients();
+            case 6 -> addIngredients();
+            case 7 -> checkClean();
+            case 8 -> getIngredients(0);
+            case 9 -> getIngredients(1);
+            case 10 -> showProfiles();
+            case 11 -> {
                 if (profiles.size() < PROFILES_LIMIT) {
                     create();
                 } else System.out.println("Настроено максимальное количество профилей");
             }
-            case 10 -> showLogs();
-            case 11 -> {
+            case 12 -> showLogs();
+            case 13 -> {
                 setPower(false);
                 logger.info("coffee machine is OFF");
             }
@@ -256,7 +276,7 @@ public class CoffeeMachine {
         }
     }
 
-    void showProfiles() throws Exception {
+    void showProfiles() {
         if (!profiles.isEmpty()) {
             for (Profile p : profiles) {
                 System.out.println((profiles.indexOf(p) + 1) + " - " + p.name);
@@ -271,59 +291,90 @@ public class CoffeeMachine {
     void chooseProfile() {
         System.out.println("Выберите Ваш профиль");
         int choice = scanner.nextInt();
-        switch (choice) {
-            case 1 -> {
-                if (profiles.size() > 0) {
-                    COUNT_OF_CUPS++;
-                    this.water -= profiles.get(0).water;
-                    this.milk -= profiles.get(0).milk;
-                    this.coffee -= profiles.get(0).coffee;
-                    System.out.println("Ваш кофе готов");
-                    logger.info("profile (1) coffee made");
+        for (int i = 0; i < 5; i++) {
+            if (choice == i + 1) {
+                if (profiles.size() > i) {
+                    if (getWater() < profiles.get(i).water || getMilk() < profiles.get(i).milk || getCoffee() < profiles.get(i).coffee) {
+                        checkIngredients();
+                    } else {
+                        COUNT_OF_CUPS++;
+                        this.water -= profiles.get(i).water;
+                        this.milk -= profiles.get(i).milk;
+                        this.coffee -= profiles.get(i).coffee;
+                        System.out.println("Ваш кофе готов");
+                        logger.info("profile (" + (i + 1) + ") coffee made");
+                    }
+                } else {
+                    System.out.println("Профиль не найден");
+                    break;
                 }
             }
-            case 2 -> {
-                if (profiles.size() > 1) {
-                    COUNT_OF_CUPS++;
-                    this.water -= profiles.get(1).water;
-                    this.milk -= profiles.get(1).milk;
-                    this.coffee -= profiles.get(1).coffee;
-                    System.out.println("Ваш кофе готов");
-                    logger.info("profile (2) coffee made");
-                }
-            }
-            case 3 -> {
-                if (profiles.size() > 2) {
-                    COUNT_OF_CUPS++;
-                    this.water -= profiles.get(2).water;
-                    this.milk -= profiles.get(2).milk;
-                    this.coffee -= profiles.get(2).coffee;
-                    System.out.println("Ваш кофе готов");
-                    logger.info("profile (2) coffee made");
-                }
-            }
-            case 4 -> {
-                if (profiles.size() > 3) {
-                    COUNT_OF_CUPS++;
-                    this.water -= profiles.get(3).water;
-                    this.milk -= profiles.get(3).milk;
-                    this.coffee -= profiles.get(3).coffee;
-                    System.out.println("Ваш кофе готов");
-                    logger.info("profile (4) coffee made");
-                }
-            }
-            case 5 -> {
-                if (profiles.size() > 4) {
-                    COUNT_OF_CUPS++;
-                    this.water -= profiles.get(4).water;
-                    this.milk -= profiles.get(4).milk;
-                    this.coffee -= profiles.get(4).coffee;
-                    System.out.println("Ваш кофе готов");
-                    logger.info("profile (5) coffee made");
-                }
-            }
-            default -> System.out.println("Профиль не найден");
         }
+//        switch (choice) {
+//            case 1 -> {
+//                if (profiles.size() > 0) {
+//                    COUNT_OF_CUPS++;
+//                    this.water -= profiles.get(0).water;
+//                    this.milk -= profiles.get(0).milk;
+//                    this.coffee -= profiles.get(0).coffee;
+//                    System.out.println("Ваш кофе готов");
+//                    logger.info("profile (1) coffee made");
+//                }
+//            }
+//            case 2 -> {
+//                if (profiles.size() > 1) {
+//                    COUNT_OF_CUPS++;
+//                    this.water -= profiles.get(1).water;
+//                    this.milk -= profiles.get(1).milk;
+//                    this.coffee -= profiles.get(1).coffee;
+//                    System.out.println("Ваш кофе готов");
+//                    logger.info("profile (2) coffee made");
+//                }
+//            }
+//            case 3 -> {
+//                if (profiles.size() > 2) {
+//                    COUNT_OF_CUPS++;
+//                    this.water -= profiles.get(2).water;
+//                    this.milk -= profiles.get(2).milk;
+//                    this.coffee -= profiles.get(2).coffee;
+//                    System.out.println("Ваш кофе готов");
+//                    logger.info("profile (2) coffee made");
+//                }
+//            }
+//            case 4 -> {
+//                if (profiles.size() > 3) {
+//                    COUNT_OF_CUPS++;
+//                    this.water -= profiles.get(3).water;
+//                    this.milk -= profiles.get(3).milk;
+//                    this.coffee -= profiles.get(3).coffee;
+//                    System.out.println("Ваш кофе готов");
+//                    logger.info("profile (4) coffee made");
+//                }
+//            }
+//            case 5 -> {
+//                if (profiles.size() > 4) {
+//                    COUNT_OF_CUPS++;
+//                    this.water -= profiles.get(4).water;
+//                    this.milk -= profiles.get(4).milk;
+//                    this.coffee -= profiles.get(4).coffee;
+//                    System.out.println("Ваш кофе готов");
+//                    logger.info("profile (5) coffee made");
+//                }
+//            }
+//            default -> System.out.println("Профиль не найден");
+//        }
+    }
+
+    void tripleEspresso() {
+        if (getWater() >= MIN_WATER_LIMIT * 3 && getCoffee() >= MIN_COFFEE_LIMIT * 3) {
+            makeEspresso(3);
+        } else checkIngredients();
+    }
+
+    void tripleCappuccino() {
+        if (getWater() >= MIN_WATER_LIMIT * 3 && getCoffee() >= MIN_COFFEE_LIMIT * 3 && getMilk() >= MIN_MILK_LIMIT * 3) {
+            makeCappuccino(3);
+        } else checkIngredients();
     }
 
     public void create() {
@@ -333,17 +384,25 @@ public class CoffeeMachine {
         logger.info("profile '" + profile.name + "' created");
     }
 
-    static void onOff() throws InputMismatchException {
+    static void onOff() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Включить кофемашину?\n1 - Да\n2 - Нет");
-        int power = scanner.nextInt();
-        if (power == 1) {
-            CoffeeMachine.setPower(true);
-            logger.info("coffee machine is ON");
-        } else if (power == 2) {
-            CoffeeMachine.setPower(false);
-            logger.info("coffee machine is OFF");
-        } else System.out.println("Введите число от 1 до 2");
+        try {
+            int power = scanner.nextInt();
+            if (power == 1) {
+                CoffeeMachine.setPower(true);
+                logger.info("coffee machine is ON");
+            } else if (power == 2) {
+                CoffeeMachine.setPower(false);
+                logger.info("coffee machine is OFF");
+            } else {
+                System.out.println("Введите число от 1 до 2");
+                onOff();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Введите число от 1 до 2");
+            onOff();
+        }
     }
 
     static void showLogs() {
@@ -372,18 +431,15 @@ public class CoffeeMachine {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CoffeeMachine coffeeMachine = new CoffeeMachine(false, 720, 240, 60);
-        try {
-            onOff();
-        } catch (Exception e) {
-            System.out.println("Введите число от 1 до 2");
-        }
+        CoffeeMachine coffeeMachine = new CoffeeMachine(false, 0, 0, 0);
 
+        onOff();
         while (CoffeeMachine.getPower()) {
             try {
                 coffeeMachine.chooseOptions();
-            } catch (Exception e) {
-                System.out.println("Введите число от 1 до 11");
+            } catch (InputMismatchException e) {
+                System.out.println("Введите число от 1 до 13");
+                coffeeMachine.scanner.next();
             }
         }
     }

@@ -1,4 +1,10 @@
-нояб. 24, 2021 4:05:31 PM CoffeeMachine onOff
+нояб. 26, 2021 2:15:06 PM CoffeeMachine onOff
 INFO: coffee machine is ON
-нояб. 24, 2021 4:05:33 PM CoffeeMachine chooseOptions
+нояб. 26, 2021 2:15:33 PM CoffeeMachine setWater
+INFO: water has been added to the coffee machine
+нояб. 26, 2021 2:15:34 PM CoffeeMachine setMilk
+INFO: milk has been added to the coffee machine
+нояб. 26, 2021 2:15:35 PM CoffeeMachine setCoffee
+INFO: coffee has been added to the coffee machine
+нояб. 26, 2021 2:16:12 PM CoffeeMachine chooseOptions
 INFO: coffee machine is OFF
