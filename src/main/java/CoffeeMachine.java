@@ -51,7 +51,7 @@ public class CoffeeMachine {
         } else {
             System.out.println("Добавьте воду: ");
             int water = scanner.nextInt();
-            this.water = Math.min(this.getWater() + water, WATER_LIMIT);
+            this.water = Math.min(getWater() + water, WATER_LIMIT);
             logger.info("water has been added to the coffee machine");
         }
     }
@@ -66,7 +66,7 @@ public class CoffeeMachine {
         } else {
             System.out.println("Добавьте молоко: ");
             int milk = scanner.nextInt();
-            this.milk = Math.min(this.getMilk() + milk, MILK_LIMIT);
+            this.milk = Math.min(getMilk() + milk, MILK_LIMIT);
             logger.info("milk has been added to the coffee machine");
         }
     }
@@ -81,7 +81,7 @@ public class CoffeeMachine {
         } else {
             System.out.println("Добавьте кофе: ");
             int coffee = scanner.nextInt();
-            this.coffee = Math.min(this.getCoffee() + coffee, COFFEE_LIMIT);
+            this.coffee = Math.min(getCoffee() + coffee, COFFEE_LIMIT);
             logger.info("coffee has been added to the coffee machine");
         }
     }
